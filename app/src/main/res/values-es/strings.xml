@@ -1,0 +1,42 @@
+<resources>
+    <string name="add_drink">Crear</string>
+    <string name="add_drink_info">Agregar Información Nutricional</string>
+    <string name="add_drinks">Bebidas +</string>
+    <string name="drink_removed_successively">Bebida removida com sucesso</string>
+    <string name="drink_saves_with_success">Bebida salva com sucesso</string>
+    <string name="delete">eliminar</string>
+    <string name="app_name">StockDrinks</string>
+    <string name="dailyDrinks">Bebidas Diarias</string>
+    <string name="daily_drinks_removed_successfully">Bebidas Diarias removidas com sucesso</string>
+    <string name="daily_drinks_saved_successfully">Bebidas Diarias guardadas com sucesso</string>
+    <string name="drink_description">Descripción de la bebida</string>
+    <string name="drink">Bebida</string>
+    <string name="insert_drink_description">Inserir a descrição da bebida</string>
+    <string name="drink_name">Nombre de la bebida</string>
+    <string name="remove_drink">Eliminar Bebida</string>
+    <string name="save">guardar</string>
+    <string name="all_fields_are_required">Todos los campos son obligatorios</string>
+    <string name="update_drink">Actualizar Bebida </string>
+    <string name="update_drink_successfully">Bebida atualizada com sucesso</string>
+    <string name="ver">Ver</string>
+    <string name="loading">Cargando ...</string>
+    <string name="please_wait">Por favor espere ...</string>
+    <string name="quantity">Cantidad</string>
+    <string name="select_category">Selecione a categoria</string>
+    <string name="category">Categoría</string>
+    <string name="category_label">Categoría</string>
+    <string name="drink_added_to_daily_list">Bebida agregada a la lista diaria</string>
+    <string name="selected">Seleccionado</string>
+    <string name="add_drink_error">Erro ao adicionar bebida</string>
+    <string name="remove_drink_error">Erro ao remover bebida</string>
+    <string name="copied_to_transfer_area">Copiado para la área de transferencia</string>
+    <string name="select_drink">seleccione bebida</string>
+    <string-array name="categories_array">
+        <item>Bebidas alcoólicas</item>
+        <item>Bebidas artesanais</item>
+        <item>Bebidas energéticas</item>
+        <item>Cervejas</item>
+        <item>Refrigerantes</item>
+        <item>Sorvetes</item>
+    </string-array>
+</resources>

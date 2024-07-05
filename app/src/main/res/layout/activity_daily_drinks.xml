@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".exercises">
+
+    <TextView
+        android:id="@+id/dailyCaloriesTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="11dp"
+        android:text="@string/dailyDrinks"
+        android:textColor="@color/yellow"
+        android:textSize="32sp"
+        app:layout_constraintBottom_toTopOf="@+id/caloriesFoodList"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ListView
+        android:id="@+id/caloriesFoodList"
+        android:layout_width="0dp"
+        android:layout_height="512dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        app:layout_constraintBottom_toTopOf="@+id/addDrinkFormButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:divider="@drawable/list_divider"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/dailyCaloriesTitle" />
+
+    <Button
+        android:id="@+id/addDrinkFormButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="60dp"
+        android:backgroundTint="@color/button_color"
+        android:text="@string/add_drinks"
+        android:textColor="@color/yellow"
+        app:icon="@drawable/ic_fluent_text_bullet_list_add_24_filled"
+        app:iconGravity="textStart"
+        app:iconSize="42dp"
+        app:iconTint="@color/yellow"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/addNewFoodButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/caloriesFoodList"
+        app:layout_constraintVertical_bias="1" />
+
+    <Button
+        android:id="@+id/addNewFoodButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="60dp"
+        android:backgroundTint="@color/button_color"
+        android:text="@string/add_drink"
+        android:textColor="@color/yellow"
+        app:icon="@drawable/ic_fluent_food_24_regular"
+        app:iconGravity="textStart"
+        app:iconSize="42dp"
+        app:iconTint="@color/yellow"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/addDrinkFormButton"
+        app:layout_constraintTop_toBottomOf="@+id/caloriesFoodList" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

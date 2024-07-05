@@ -1,0 +1,402 @@
+[
+  {
+    "foodNumber": 2185,
+    "foodDescription": "Cachaça Espirito de Minas +12",
+    "category": "bebidas alcoolicas"
+  },
+  {
+    "foodNumber": 2058,
+    "foodDescription": "Coca-Cola Jack Daniel's",
+    "category": "bebidas alcoolicas"
+  },
+  {
+    "foodNumber": 2202,
+    "foodDescription": "Doce de Leite",
+    "category": "bebidas alcoolicas"
+  },
+  {
+    "foodNumber": 2184,
+    "foodDescription": "Dose Cachaça Espirito de Minas",
+    "category": "bebidas alcoolicas"
+  },
+  {
+    "foodNumber": 2201,
+    "foodDescription": "Licor Avela",
+    "category": "bebidas alcoolicas"
+  },
+  {
+    "foodNumber": 2200,
+    "foodDescription": "Licor Banoffee",
+    "category": "bebidas alcoolicas"
+  },
+  {
+    "foodNumber": 2203,
+    "foodDescription": "Licor Café",
+    "category": "bebidas alcoolicas"
+  },
+  {
+    "foodNumber": 2199,
+    "foodDescription": "Licor Doce de Leite",
+    "category": "bebidas alcoolicas"
+  },
+  {
+    "foodNumber": 159,
+    "foodDescription": "Nosso Vinho 1L",
+    "category": "bebidas alcoolicas"
+  },
+  {
+    "foodNumber": 31538,
+    "foodDescription": "Vinho do Frade Niagara Seco",
+    "category": "bebidas alcoolicas"
+  },
+  {
+    "foodNumber": 31478,
+    "foodDescription": "Vinho Rosé 250ml",
+    "category": "bebidas alcoolicas"
+  },
+  {
+    "foodNumber": 1877,
+    "foodDescription": "Vinho Tinto Seco",
+    "category": "bebidas alcoolicas"
+  },
+  {
+    "foodNumber": 31539,
+    "foodDescription": "Vinho Tinto Suave",
+    "category": "bebidas alcoolicas"
+  },
+  {
+    "foodNumber": 287,
+    "foodDescription": "Goose Hazy IPA",
+    "category": "bebidas artesanais"
+  },
+  {
+    "foodNumber": 288,
+    "foodDescription": "Goose IPA",
+    "category": "bebidas artesanais"
+  },
+  {
+    "foodNumber": 289,
+    "foodDescription": "Goose Island Sofie Long Neck",
+    "category": "bebidas artesanais"
+  },
+  {
+    "foodNumber": 290,
+    "foodDescription": "Goose Midway",
+    "category": "bebidas artesanais"
+  },
+  {
+    "foodNumber": 297,
+    "foodDescription": "Monster Ultra Paradise",
+    "category": "bebidas energéticas"
+  },
+  {
+    "foodNumber": 1919,
+    "foodDescription": "Monster Absolutely Zero",
+    "category": "bebidas energeticas"
+  },
+  {
+    "foodNumber": 1376,
+    "foodDescription": "Monster Drag Ice Tea Lemon",
+    "category": "bebidas energeticas"
+  },
+  {
+    "foodNumber": 31507,
+    "foodDescription": "Monster Energy Taurina",
+    "category": "bebidas energeticas"
+  },
+  {
+    "foodNumber": 1377,
+    "foodDescription": "Monster Khaos LT",
+    "category": "bebidas energeticas"
+  },
+  {
+    "foodNumber": 2187,
+    "foodDescription": "Monster Khaotic",
+    "category": "bebidas energeticas"
+  },
+  {
+    "foodNumber": 1750,
+    "foodDescription": "Monster Mango Loco",
+    "category": "bebidas energeticas"
+  },
+  {
+    "foodNumber": 2166,
+    "foodDescription": "Monster Mango Loco 269ml",
+    "category": "bebidas energeticas"
+  },
+  {
+    "foodNumber": 1751,
+    "foodDescription": "Monster Pacific Punch",
+    "category": "bebidas energeticas"
+  },
+  {
+    "foodNumber": 2186,
+    "foodDescription": "Monster Pipeline",
+    "category": "bebidas energeticas"
+  },
+  {
+    "foodNumber": 1892,
+    "foodDescription": "Monster Ultra Sem Acucar",
+    "category": "bebidas energeticas"
+  },
+  {
+    "foodNumber": 31508,
+    "foodDescription": "Monster Ultra Violet",
+    "category": "bebidas energeticas"
+  },
+  {
+    "foodNumber": 2038,
+    "foodDescription": "Monster Ultra Watermelon",
+    "category": "bebidas energeticas"
+  },
+  {
+    "foodNumber": 275,
+    "foodDescription": "Amstel",
+    "category": "cerveja"
+  },
+  {
+    "foodNumber": 276,
+    "foodDescription": "Brahma Malzbier Long Neck",
+    "category": "cerveja"
+  },
+  {
+    "foodNumber": 277,
+    "foodDescription": "Budweiser Long Neck",
+    "category": "cerveja"
+  },
+  {
+    "foodNumber": 278,
+    "foodDescription": "Budweiser Zero Long",
+    "category": "cerveja"
+  },
+  {
+    "foodNumber": 281,
+    "foodDescription": "Corona Long Neck",
+    "category": "cerveja"
+  },
+  {
+    "foodNumber": 282,
+    "foodDescription": "Corona Zero Long",
+    "category": "cerveja"
+  },
+  {
+    "foodNumber": 283,
+    "foodDescription": "Coruja IPA",
+    "category": "cerveja"
+  },
+  {
+    "foodNumber": 284,
+    "foodDescription": "Coruja Viva",
+    "category": "cerveja"
+  },
+  {
+    "foodNumber": 293,
+    "foodDescription": "Heineken Long Neck",
+    "category": "cerveja"
+  },
+  {
+    "foodNumber": 294,
+    "foodDescription": "Heineken Zero Long Neck",
+    "category": "cerveja"
+  },
+  {
+    "foodNumber": 296,
+    "foodDescription": "Lagunita IPA",
+    "category": "cerveja"
+  },
+  {
+    "foodNumber": 300,
+    "foodDescription": "Stella Long Neck",
+    "category": "cerveja"
+  },
+  {
+    "foodNumber": 273,
+    "foodDescription": "Agua com gas",
+    "category": "refrigerantes"
+  },
+  {
+    "foodNumber": 274,
+    "foodDescription": "Agua sem gas",
+    "category": "refrigerantes"
+  },
+  {
+    "foodNumber": 279,
+    "foodDescription": "Coca Cola LT",
+    "category": "refrigerantes"
+  },
+  {
+    "foodNumber": 280,
+    "foodDescription": "Coca Zero LT",
+    "category": "refrigerantes"
+  },
+  {
+    "foodNumber": 285,
+    "foodDescription": "Fanta Laranja LT",
+    "category": "refrigerantes"
+  },
+  {
+    "foodNumber": 286,
+    "foodDescription": "Fanta Uva LT",
+    "category": "refrigerantes"
+  },
+  {
+    "foodNumber": 291,
+    "foodDescription": "Guarana Antarctica LT",
+    "category": "refrigerantes"
+  },
+  {
+    "foodNumber": 292,
+    "foodDescription": "Guarana Antarctica Zero LT",
+    "category": "refrigerantes"
+  },
+  {
+    "foodNumber": 295,
+    "foodDescription": "Itubaina LT",
+    "category": "refrigerantes"
+  },
+  {
+    "foodNumber": 298,
+    "foodDescription": "Schweppes Citrus LT",
+    "category": "refrigerantes"
+  },
+  {
+    "foodNumber": 299,
+    "foodDescription": "Sprite Fresh Limão",
+    "category": "refrigerantes"
+  },
+  {
+    "foodNumber": 301,
+    "foodDescription": "Tonica Antarctica LT",
+    "category": "refrigerantes"
+  },
+  {
+    "foodNumber": 302,
+    "foodDescription": "Tonica Antarctica Sem Açúcar",
+    "category": "refrigerantes"
+  },
+  {
+    "foodNumber": 12,
+    "foodDescription": "Mini Paleta 7 belo 65g",
+    "category": "sorvetes"
+  },
+  {
+    "foodNumber": 1785,
+    "foodDescription": "Mini Paleta big big tuti frut",
+    "category": "sorvetes"
+  },
+  {
+    "foodNumber": 1780,
+    "foodDescription": "Mini Paleta chocolate 65g",
+    "category": "sorvetes"
+  },
+  {
+    "foodNumber": 762,
+    "foodDescription": "Mini Paleta coco queimado",
+    "category": "sorvetes"
+  },
+  {
+    "foodNumber": 761,
+    "foodDescription": "Mini Paleta d/leite aviação 65g",
+    "category": "sorvetes"
+  },
+  {
+    "foodNumber": 59,
+    "foodDescription": "Mini Paleta limonada suica 65g",
+    "category": "sorvetes"
+  },
+  {
+    "foodNumber": 15,
+    "foodDescription": "Mini Paleta manga",
+    "category": "sorvetes"
+  },
+  {
+    "foodNumber": 2181,
+    "foodDescription": "Mini Paleta maracuja e morango",
+    "category": "sorvetes"
+  },
+  {
+    "foodNumber": 2009,
+    "foodDescription": "Mini Paleta milho da fazenda",
+    "category": "sorvetes"
+  },
+  {
+    "foodNumber": 1781,
+    "foodDescription": "Mini Paleta moran c/ flocos 65g",
+    "category": "sorvetes"
+  },
+  {
+    "foodNumber": 2180,
+    "foodDescription": "Mini Paleta ovomaltine vegano",
+    "category": "sorvetes"
+  },
+  {
+    "foodNumber": 763,
+    "foodDescription": "Mini Paleta tanjal 65g",
+    "category": "sorvetes"
+  },
+  {
+    "foodNumber": 31473,
+    "foodDescription": "Mini Paleta uvajal 65g",
+    "category": "sorvetes"
+  },
+  {
+    "foodNumber": 5,
+    "foodDescription": "Paleta acai c/ leite ninho 90g",
+    "category": "sorvetes"
+  },
+  {
+    "foodNumber": 7,
+    "foodDescription": "Paleta brigadeiro no palito 90g",
+    "category": "sorvetes"
+  },
+  {
+    "foodNumber": 1998,
+    "foodDescription": "Paleta brownie 90g",
+    "category": "sorvetes"
+  },
+  {
+    "foodNumber": 1782,
+    "foodDescription": "Paleta cheesecake morango 90g",
+    "category": "sorvetes"
+  },
+  {
+    "foodNumber": 465,
+    "foodDescription": "Paleta chocolate zero 90g",
+    "category": "sorvetes"
+  },
+  {
+    "foodNumber": 9,
+    "foodDescription": "Paleta coco branco zero 90g",
+    "category": "sorvetes"
+  },
+  {
+    "foodNumber": 10,
+    "foodDescription": "Paleta coco com brigadeiro 90g",
+    "category": "sorvetes"
+  },
+  {
+    "foodNumber": 31477,
+    "foodDescription": "Paleta iogurte com frutas 90g",
+    "category": "sorvetes"
+  },
+  {
+    "foodNumber": 11,
+    "foodDescription": "Paleta leite c/ creme de avela",
+    "category": "sorvetes"
+  },
+  {
+    "foodNumber": 31476,
+    "foodDescription": "Paleta moran c/ leite cond 90g",
+    "category": "sorvetes"
+  },
+  {
+    "foodNumber": 31485,
+    "foodDescription": "Paleta ovomaltine 90g",
+    "category": "sorvetes"
+  },
+  {
+    "foodNumber": 17,
+    "foodDescription": "Paleta tapioca c/ leite con 90g",
+    "category": "sorvetes"
+  }
+]
