@@ -3,14 +3,12 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:padding="16dp"
-    android:background="#000000">
+    android:padding="16dp">
 
     <TextView
         android:id="@+id/titleTextViewItem"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="#FFFFFF"
         android:textSize="24sp"
         android:textStyle="bold"
         android:paddingBottom="4dp" />
@@ -25,7 +23,6 @@
             android:id="@+id/textViewItem"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="#CCCCCC"
             android:textSize="18sp" />
 
     </HorizontalScrollView>
@@ -36,7 +33,7 @@
         android:orientation="vertical"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
+        android:layout_alignParentTop="true"
         android:gravity="end">
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton

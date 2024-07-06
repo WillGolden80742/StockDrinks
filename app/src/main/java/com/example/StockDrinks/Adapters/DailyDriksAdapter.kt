@@ -62,16 +62,16 @@ class DailyDriksAdapter(context: Context, private val dailyDrinksList: List<Dail
                 drinksListSums.append(spannableCategory)
                 currentCategory = category
             }
-            val quantityText = "${totalQuantity.toString().padStart(4, '0')} - $description\n"
+            val quantityText = "${totalQuantity.toString().padStart(4, '0')} ; $description\n"
             drinksListSums.append(quantityText)
         }
 
-        descriptionTextView.text = drinksListSums
-
+        descriptionTextView.text = drinksListSums.toString().replace(";","-")
 
         copyButton.setOnClickListener {
             val clipboardManager = getSystemService(context, ClipboardManager::class.java)
-            val clipData = ClipData.newPlainText("label",dateTextView.text.toString() + "\n" + drinksListSums)
+            val date = dateTextView.text.toString()+";"
+            val clipData = ClipData.newPlainText("label",date + "\n" + drinksListSums)
             clipboardManager!!.setPrimaryClip(clipData)
             Toast.makeText(context,
                 context.getString(R.string.copied_to_transfer_area), Toast.LENGTH_SHORT).show()
@@ -84,7 +84,7 @@ class DailyDriksAdapter(context: Context, private val dailyDrinksList: List<Dail
                 intent.putExtra("dailyCaloriesDate", dailyDrinks.date)
                 context.startActivity(intent)
             } catch (e: Exception) {
-                println("Erro ao chamar a tela de calorias diárias: $e")
+                println(context.getString(R.string.error_when_calling_the_daily_calorie_screen)+":$e")
             }
         }
 

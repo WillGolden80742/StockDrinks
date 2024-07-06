@@ -2,8 +2,8 @@
     <string name="add_drink">Crear</string>
     <string name="add_drink_info">Agregar Información Nutricional</string>
     <string name="add_drinks">Bebidas +</string>
-    <string name="drink_removed_successively">Bebida removida com sucesso</string>
-    <string name="drink_saves_with_success">Bebida salva com sucesso</string>
+    <string name="drink_removed_successively">Bebida eliminada correctamente</string>
+    <string name="drink_saves_with_success">Bebida guardada com sucesso</string>
     <string name="delete">eliminar</string>
     <string name="app_name">StockDrinks</string>
     <string name="dailyDrinks">Bebidas Diarias</string>
@@ -31,12 +31,17 @@
     <string name="remove_drink_error">Erro ao remover bebida</string>
     <string name="copied_to_transfer_area">Copiado para la área de transferencia</string>
     <string name="select_drink">seleccione bebida</string>
+    <string name="error_when_calling_the_daily_calorie_screen">Error al llamar la pantalla de calorías diarias</string>
+    <string name="error_saving_daily_calories">Error al guardar las calorías diarias</string>
+    <string name="error_calling_drinks_screen">Error al llamar la pantalla de bebidas</string>
+    <string name="it_was_not_possible_to_load_the_drink">No se pudo cargar la bebida</string>
+    <string name="error_calling_daily_drinks">Error al llamar las bebidas diarias</string>
     <string-array name="categories_array">
-        <item>Bebidas alcoólicas</item>
-        <item>Bebidas artesanais</item>
-        <item>Bebidas energéticas</item>
-        <item>Cervejas</item>
-        <item>Refrigerantes</item>
-        <item>Sorvetes</item>
+        <item>bebidas alcoolicas</item>
+        <item>bebidas artesanais</item>
+        <item>bebidas energeticas</item>
+        <item>cervejas</item>
+        <item>refrigerantes</item>
+        <item>sorvetes</item>
     </string-array>
 </resources>

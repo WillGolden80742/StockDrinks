@@ -136,7 +136,7 @@
                 android:backgroundTint="@color/button_color"
                 android:enabled="false"
                 android:textColor="@color/yellow"
-                app:icon="@drawable/ic_fluent_text_bullet_list_add_24_filled"
+                app:icon="@drawable/ic_fluent_save_24_regular"
                 app:iconGravity="textStart"
                 app:iconSize="32dp"
                 app:iconTint="@color/yellow" />
@@ -151,22 +151,6 @@
             app:layout_constraintBottom_toTopOf="@+id/removeDailyDrinksButton"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent">
-
-            <Button
-                android:id="@+id/saveDrinksButton"
-                android:layout_width="0dp"
-                android:layout_height="45dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="5dp"
-                android:layout_weight="1"
-                android:backgroundTint="@color/button_color"
-                android:text="@string/save"
-                android:textColor="@color/yellow"
-                app:icon="@drawable/ic_fluent_save_24_regular"
-                app:iconGravity="textStart"
-                app:iconSize="24dp"
-                app:iconTint="@color/yellow" />
 
             <Button
                 android:id="@+id/seeDrinksButton"

@@ -44,7 +44,7 @@ class JSON {
                 return item
             }
         }
-        throw RuntimeException("Item não encontrado")
+        throw RuntimeException("Item not found")
     }
 
 }

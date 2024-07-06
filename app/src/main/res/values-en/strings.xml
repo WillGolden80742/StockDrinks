@@ -31,10 +31,15 @@
     <string name="remove_drink_error">Error removing drink</string>
     <string name="copied_to_transfer_area">Copied to clipboard</string>
     <string name="select_drink">select drink</string>
+    <string name="error_when_calling_the_daily_calorie_screen">Error when calling the daily calorie screen</string>
+    <string name="error_saving_daily_calories">Error saving daily calories</string>
+    <string name="error_calling_drinks_screen">Error calling drinks screen</string>
+    <string name="it_was_not_possible_to_load_the_drink">Não foi possível carregar a bebida</string>
+    <string name="error_calling_daily_drinks">Error calling daily drinks</string>
     <string-array name="categories_array">
-        <item>bebidas alcoólicas</item>
+        <item>bebidas alcoolicas</item>
         <item>bebidas artesanais</item>
-        <item>bebidas energéticas</item>
+        <item>bebidas energeticas</item>
         <item>cervejas</item>
         <item>refrigerantes</item>
         <item>sorvetes</item>

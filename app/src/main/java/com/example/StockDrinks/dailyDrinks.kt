@@ -50,7 +50,7 @@ class dailyDrinks : AppCompatActivity() {
         try {
             startActivity(Intent(this, formDrinks::class.java))
         } catch (e: Exception) {
-            println("Erro ao chamar a tela de alimentos: $e")
+            println(getString(R.string.error_calling_drinks_screen)+": $e")
         }
     }
 

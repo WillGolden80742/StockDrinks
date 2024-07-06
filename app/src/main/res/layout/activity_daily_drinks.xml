@@ -3,8 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".exercises">
+    android:layout_height="match_parent">
 
     <TextView
         android:id="@+id/dailyCaloriesTitle"
@@ -15,7 +14,7 @@
         android:layout_marginEnd="20dp"
         android:layout_marginBottom="11dp"
         android:text="@string/dailyDrinks"
-        android:textColor="@color/yellow"
+        android:textColor="@color/title_color"
         android:textSize="32sp"
         app:layout_constraintBottom_toTopOf="@+id/caloriesFoodList"
         app:layout_constraintEnd_toEndOf="parent"
@@ -60,7 +59,7 @@
         android:backgroundTint="@color/button_color"
         android:text="@string/add_drink"
         android:textColor="@color/yellow"
-        app:icon="@drawable/ic_fluent_food_24_regular"
+        app:icon="@drawable/ic_fluent_drink_wine_24_regular"
         app:iconGravity="textStart"
         app:iconSize="42dp"
         app:iconTint="@color/yellow"

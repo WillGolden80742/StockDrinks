@@ -43,7 +43,6 @@ class formDailyDrinks : AppCompatActivity() {
     private lateinit var removeDailyDrinksButton: Button
     private lateinit var quantityEditText: EditText
     private lateinit var addDrinkButton: Button
-    private lateinit var saveCaloriesButton: Button
     private var currentDrink: Drink? = null
     private val DOUBLE_CLICK_TIME_DELTA: Long = 300
     private var lastClickTime: Long = 0
@@ -62,7 +61,6 @@ class formDailyDrinks : AppCompatActivity() {
         addDrinkButton = findViewById(R.id.addDrinkButton)
         seeDrinksButton = findViewById(R.id.seeDrinksButton)
         removeDailyDrinksButton = findViewById(R.id.removeDailyDrinksButton)
-        saveCaloriesButton = findViewById(R.id.saveDrinksButton)
 
         loading()
         //getInputExtra
@@ -75,17 +73,11 @@ class formDailyDrinks : AppCompatActivity() {
 
         addDrinkButton.setOnClickListener {
             try {
-                saveCaloriesButton.isEnabled = true
                 addDrinkToDailyList()
             } catch (e: Exception) {
                 Toast.makeText(this, "Error adding food to daily list", Toast.LENGTH_SHORT).show()
             }
         }
-
-        saveCaloriesButton.setOnClickListener {
-            saveDailyCalories()
-        }
-
 
 
         searchEditText.setOnEditorActionListener { _, _, _ ->
@@ -199,6 +191,7 @@ class formDailyDrinks : AppCompatActivity() {
                 seeDrinksButton.isEnabled = false
             }
             currentDrink = null
+            saveDailyDrinks()
         }
     }
 
@@ -239,7 +232,6 @@ class formDailyDrinks : AppCompatActivity() {
         } catch (e: Exception) {
             return input.replace("[^0-9]".toRegex(), "")
         }
-
     }
 
     fun calculeQuantity() {
@@ -302,7 +294,7 @@ class formDailyDrinks : AppCompatActivity() {
             dailyDrinksList.putExtra("foodsList", dailyDrinks.drinkList.let { jsonUtil.toJson(it) })
             startActivity(dailyDrinksList)
         } catch (e: Exception) {
-            println(RuntimeException("Error calling daily calories foods: $e"))
+            println(RuntimeException(getString(R.string.error_calling_daily_drinks)+": $e"))
         }
     }
     fun setFoodToFoodList() {
@@ -366,6 +358,7 @@ class formDailyDrinks : AppCompatActivity() {
                         Toast.makeText(this,
                             getString(R.string.drink_added_to_daily_list), Toast.LENGTH_SHORT).show()
                         nameDrinkLabel.text = getString(R.string.select_drink)
+                        saveDailyDrinks()
                     } ?: run {
                         quantityEditText.error = "Invalid input"
                     }
@@ -378,7 +371,7 @@ class formDailyDrinks : AppCompatActivity() {
         }
     }
 
-    fun saveDailyCalories() {
+    fun saveDailyDrinks() {
         addDrinkToDailyList()
         val dailyCaloriesFoodsList =
             dailyDrinks.drinkList.filter { it.foodDescription != "NO_DESCRIPTION" }
@@ -401,14 +394,9 @@ class formDailyDrinks : AppCompatActivity() {
                 dailyDrinks.drinkList = dailyCaloriesFoodsList
                 dailyDrinksLists = dailyDrinksLists.plus(dailyDrinks)
                 cache.setCache(this, "dailyDrinks", jsonUtil.toJson(dailyDrinksLists))
-                Toast.makeText(
-                    this,
-                    getString(R.string.daily_drinks_saved_successfully), Toast.LENGTH_SHORT
-                ).show()
             } catch (e: Exception) {
-                println(RuntimeException("Error saving daily calories: $e"))
+                println(RuntimeException(getString(R.string.error_saving_daily_calories)+":$e"))
             }
-            finish()
         } else {
             removeDailyDrinks()
         }

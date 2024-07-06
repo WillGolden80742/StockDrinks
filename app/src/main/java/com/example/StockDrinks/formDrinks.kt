@@ -40,7 +40,7 @@ class formDrinks : AppCompatActivity() {
         // if has extra, load the food
         if (intent.hasExtra("foodID")) {
             val foodID = intent.getStringExtra("foodID")
-            addFoodFormButton.text = getString(R.string.drink)
+            addFoodFormButton.text = getString(R.string.update_drink)
             try {
                 foodCache = cache.getCache(this, "Alimentos")
                 if (foodCache != "NOT_FOUND") {
@@ -62,7 +62,8 @@ class formDrinks : AppCompatActivity() {
                 }
             } catch (e: Exception) {
                 // Toast para indicar que não foi possível carregar o alimento
-                Toast.makeText(this, "Não foi possível carregar o alimento", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this,
+                    getString(R.string.it_was_not_possible_to_load_the_drink), Toast.LENGTH_SHORT).show()
                 System.out.println("Erro food: "+e)
             }
         } else {
