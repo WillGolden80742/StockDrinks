@@ -1,7 +1,7 @@
 <resources>
     <string name="add_drink">Register</string>
     <string name="add_drink_info">Add Drink Info</string>
-    <string name="add_drinks">Drinks +</string>
+    <string name="add_drinks">Drinks</string>
     <string name="drink_removed_successively">Drink removed successfully</string>
     <string name="drink_saves_with_success">Drink saved successfully</string>
     <string name="delete">delete</string>

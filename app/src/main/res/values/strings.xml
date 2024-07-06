@@ -1,7 +1,7 @@
 <resources>
     <string name="add_drink">Cadastrar</string>
     <string name="add_drink_info">Adicionar bebida</string>
-    <string name="add_drinks">Bebidas +</string>
+    <string name="add_drinks">Bebidas</string>
     <string name="drink_removed_successively">Bebida removida com sucesso</string>
     <string name="drink_saves_with_success">Bebida salva com sucesso</string>
     <string name="delete">apagar</string>

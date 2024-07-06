@@ -1,7 +1,7 @@
 <resources>
     <string name="add_drink">Crear</string>
     <string name="add_drink_info">Agregar Información Nutricional</string>
-    <string name="add_drinks">Bebidas +</string>
+    <string name="add_drinks">Bebidas</string>
     <string name="drink_removed_successively">Bebida eliminada correctamente</string>
     <string name="drink_saves_with_success">Bebida guardada com sucesso</string>
     <string name="delete">eliminar</string>
