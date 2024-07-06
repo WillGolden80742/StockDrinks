@@ -56,13 +56,11 @@ class DailyDriksAdapter(context: Context, private val dailyDrinksList: List<Dail
             val (category, description) = key
             if (category != currentCategory) {
                 val categoryText = "${category.uppercase()}\n"
-                val spannableCategory = SpannableString(categoryText).apply {
-                    setSpan(android.text.style.StyleSpan(android.graphics.Typeface.BOLD), 0, categoryText.length, 0)
-                }
-                drinksListSums.append(spannableCategory)
+                drinksListSums.append(categoryText)
                 currentCategory = category
             }
-            val quantityText = "${totalQuantity.toString().padStart(4, '0')} ; $description\n"
+            val formattedDescription = description.split(" ").joinToString(" ") { it.lowercase().capitalize() }
+            val quantityText = "${totalQuantity.toString().padStart(4, '0')} - $formattedDescription\n"
             drinksListSums.append(quantityText)
         }
 
