@@ -15,7 +15,7 @@
       android:layout_marginEnd="20dp"
       android:layout_marginBottom="20dp"
       android:text="@string/drink"
-      android:textColor="@color/yellow"
+      android:textColor="@color/title_color"
       android:textSize="32sp"
       app:layout_constraintBottom_toTopOf="@+id/scrollView"
       app:layout_constraintEnd_toEndOf="parent"
