@@ -38,6 +38,7 @@ class DrinksAdapter(context: Context, drinkList: List<Drink>, activity:String="f
         when (activity) {
             "formDailyDrinks" -> {
                 detailsTextView.text = currentItem!!.category.uppercase()
+
                 editButton.setOnClickListener {
                     val intent = Intent(context, formDrinks::class.java).apply {
                         putExtra("foodID", currentItem?.foodNumber)

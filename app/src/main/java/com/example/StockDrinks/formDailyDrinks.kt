@@ -42,7 +42,7 @@ class formDailyDrinks : AppCompatActivity() {
     private lateinit var seeDrinksButton: Button
     private lateinit var removeDailyDrinksButton: Button
     private lateinit var quantityEditText: EditText
-    private lateinit var addDrinkButton: Button
+    private lateinit var saveDrinkButton: Button
     private var currentDrink: Drink? = null
     private val DOUBLE_CLICK_TIME_DELTA: Long = 300
     private var lastClickTime: Long = 0
@@ -58,7 +58,7 @@ class formDailyDrinks : AppCompatActivity() {
         nameDrinkLabel = findViewById(R.id.nameDrinkLabel)
         editTextDate = findViewById(R.id.editTextDate)
         quantityEditText = findViewById(R.id.quantityEditText)
-        addDrinkButton = findViewById(R.id.addDrinkButton)
+        saveDrinkButton = findViewById(R.id.saveDrinkButton)
         seeDrinksButton = findViewById(R.id.seeDrinksButton)
         removeDailyDrinksButton = findViewById(R.id.removeDailyDrinksButton)
 
@@ -71,12 +71,9 @@ class formDailyDrinks : AppCompatActivity() {
             hideKeyboard(this.currentFocus ?: View(this))
         }
 
-        addDrinkButton.setOnClickListener {
-            try {
-                addDrinkToDailyList()
-            } catch (e: Exception) {
-                Toast.makeText(this, "Error adding food to daily list", Toast.LENGTH_SHORT).show()
-            }
+        saveDrinkButton.setOnClickListener {
+            setFoodToFoodList()
+            saveDailyDrinks()
         }
 
 
@@ -190,7 +187,6 @@ class formDailyDrinks : AppCompatActivity() {
             if (dailyDrinks.drinkList.isEmpty()) {
                 seeDrinksButton.isEnabled = false
             }
-            currentDrink = null
             saveDailyDrinks()
         }
     }
@@ -302,7 +298,7 @@ class formDailyDrinks : AppCompatActivity() {
     }
     fun selectedFood(drink: Drink) {
         try {
-            addDrinkButton.isEnabled = true
+            saveDrinkButton.isEnabled = true
             quantityEditText.isEnabled = true
             currentDrink = drink
             nameDrinkLabel.text = currentDrink!!.foodDescription
@@ -342,7 +338,6 @@ class formDailyDrinks : AppCompatActivity() {
     }
 
     fun addDrinkToDailyList() {
-        seeDrinksButton.isEnabled = true
         if (currentDrink !== null) {
             try {
                 currentDrink?.let { drink ->
@@ -355,10 +350,10 @@ class formDailyDrinks : AppCompatActivity() {
                         currentDrink = null
                         quantityEditText.setText("1")
                         quantityEditText.isEnabled = false
+                        seeDrinksButton.isEnabled = true
                         Toast.makeText(this,
                             getString(R.string.drink_added_to_daily_list), Toast.LENGTH_SHORT).show()
                         nameDrinkLabel.text = getString(R.string.select_drink)
-                        saveDailyDrinks()
                     } ?: run {
                         quantityEditText.error = "Invalid input"
                     }
@@ -373,8 +368,7 @@ class formDailyDrinks : AppCompatActivity() {
 
     fun saveDailyDrinks() {
         addDrinkToDailyList()
-        val dailyCaloriesFoodsList =
-            dailyDrinks.drinkList.filter { it.foodDescription != "NO_DESCRIPTION" }
+        val dailyCaloriesFoodsList = dailyDrinks.drinkList.filter { it.foodDescription != "NO_DESCRIPTION" }
         if (dailyCaloriesFoodsList.isNotEmpty() || currentDrink != null) {
             val cache = Cache()
             val jsonUtil = JSON()
@@ -388,10 +382,10 @@ class formDailyDrinks : AppCompatActivity() {
                         emptyList()
                     }
                 val formattedDate = editTextDate.text.toString()
-                val dailyCaloriesListFiltered =
-                    dailyDrinksLists.filter { it.date == formattedDate }
-                dailyDrinksLists = dailyDrinksLists.minus(dailyCaloriesListFiltered)
-                dailyDrinks.drinkList = dailyCaloriesFoodsList
+                val dailyCaloriesListFiltered = dailyDrinksLists.filter { it.date == formattedDate }
+                if (dailyCaloriesListFiltered.isNotEmpty()) {
+                    dailyDrinksLists = dailyDrinksLists.minus(dailyCaloriesListFiltered)
+                }
                 dailyDrinksLists = dailyDrinksLists.plus(dailyDrinks)
                 cache.setCache(this, "dailyDrinks", jsonUtil.toJson(dailyDrinksLists))
             } catch (e: Exception) {

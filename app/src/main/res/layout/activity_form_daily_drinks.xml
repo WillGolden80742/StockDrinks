@@ -130,7 +130,7 @@
                 android:text="1" />
 
             <Button
-                android:id="@+id/addDrinkButton"
+                android:id="@+id/saveDrinkButton"
                 android:layout_width="80dp"
                 android:layout_height="46dp"
                 android:layout_marginEnd="10dp"
