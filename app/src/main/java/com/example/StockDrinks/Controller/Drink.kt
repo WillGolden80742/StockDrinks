@@ -12,6 +12,7 @@ import java.time.format.DateTimeFormatter
 class Drink (
     var foodNumber: String = "0",
     var quantity: Double = 1.0,
+    var calcArray: List<String> = listOf(),
     var foodDescription: String = "NO_DESCRIPTION",
     var category: String = "NO_CATEGORY",
     var timeStamp: String = "00:00"
@@ -31,6 +32,10 @@ class Drink (
     fun toString(context: Context): String {
         val decimalFormat = DecimalFormat("#.##")
         val quantityLabel = context.getString(R.string.quantity)
-        return context.getString(R.string.category_label)+": "+category+",\n"+quantityLabel + ": " + decimalFormat.format(quantity)+",\nTime: "+timeStamp
+        var calcLabel = "Calcs:\n"+calcArray.joinToString(",\n")+",\n"
+        if (calcArray.isEmpty()) {
+            calcLabel = ""
+        }
+        return context.getString(R.string.category_label)+": "+category+",\n"+quantityLabel + ": " + decimalFormat.format(quantity)+",\n"+calcLabel+"Time: "+timeStamp
     }
 }

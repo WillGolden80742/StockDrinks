@@ -72,7 +72,7 @@ class formDailyDrinks : AppCompatActivity() {
         }
 
         saveDrinkButton.setOnClickListener {
-            setFoodToFoodList()
+            searchDrink(searchEditText.text.toString())
             saveDailyDrinks()
         }
 
@@ -181,7 +181,7 @@ class formDailyDrinks : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        setFoodToFoodList()
+        loadDrinkToDrinkList()
         if (dailyDrinksList.getDrinkList().size !== dailyDrinks.drinkList.size) {
             dailyDrinks.drinkList = dailyDrinksList.getDrinkList()
             if (dailyDrinks.drinkList.isEmpty()) {
@@ -205,7 +205,10 @@ class formDailyDrinks : AppCompatActivity() {
                         "Resultado de ${firstPart.toInt()} + ${secondPart.toInt()} = ${(firstPart + secondPart).toInt()}",
                         Toast.LENGTH_LONG
                     ).show()
-                    firstPart + secondPart
+                    val result = firstPart + secondPart
+                    val calArray = currentDrink!!.calcArray.plus("${firstPart.toInt()} + ${secondPart.toInt()} = ${result.toInt()}")
+                    currentDrink!!.calcArray = calArray
+                    result
                 }
 
                 regexMultiply.containsMatchIn(input) -> {
@@ -219,7 +222,10 @@ class formDailyDrinks : AppCompatActivity() {
                         "Resultado de ${firstPart.toInt()} x ${secondPart.toInt()} = ${(firstPart * secondPart).toInt()}",
                         Toast.LENGTH_LONG
                     ).show()
-                    firstPart * secondPart
+                    val result = firstPart * secondPart
+                    val calArray = currentDrink!!.calcArray.plus("${firstPart.toInt()} x ${secondPart.toInt()} = ${result.toInt()}")
+                    currentDrink!!.calcArray = calArray
+                    result
                 }
 
                 else -> throw IllegalArgumentException("Operador não suportado na entrada: $input")
@@ -293,10 +299,10 @@ class formDailyDrinks : AppCompatActivity() {
             println(RuntimeException(getString(R.string.error_calling_daily_drinks)+": $e"))
         }
     }
-    fun setFoodToFoodList() {
+    fun loadDrinkToDrinkList() {
         searchDrink("")
     }
-    fun selectedFood(drink: Drink) {
+    fun selectedDrink(drink: Drink) {
         try {
             saveDrinkButton.isEnabled = true
             quantityEditText.isEnabled = true
@@ -368,8 +374,8 @@ class formDailyDrinks : AppCompatActivity() {
 
     fun saveDailyDrinks() {
         addDrinkToDailyList()
-        val dailyCaloriesFoodsList = dailyDrinks.drinkList.filter { it.foodDescription != "NO_DESCRIPTION" }
-        if (dailyCaloriesFoodsList.isNotEmpty() || currentDrink != null) {
+        val dailyDrinksList = dailyDrinks.drinkList.filter { it.foodDescription != "NO_DESCRIPTION" }
+        if (dailyDrinksList.isNotEmpty() || currentDrink != null) {
             val cache = Cache()
             val jsonUtil = JSON()
             try {

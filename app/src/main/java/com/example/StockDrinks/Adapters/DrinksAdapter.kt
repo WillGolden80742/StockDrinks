@@ -54,7 +54,7 @@ class DrinksAdapter(context: Context, drinkList: List<Drink>, activity:String="f
                             Toast.LENGTH_SHORT
                         ).show()
                         var formDailyDrinks = context as formDailyDrinks
-                        currentItem?.let { it1 -> formDailyDrinks.selectedFood(it1) }
+                        currentItem?.let { it1 -> formDailyDrinks.selectedDrink(it1) }
                     } catch (e: Exception) {
                         Toast.makeText(context,
                             context.getString(R.string.add_drink_error), Toast.LENGTH_SHORT).show()
