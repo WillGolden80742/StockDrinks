@@ -19,7 +19,8 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 class DrinksAdapter(context: Context, drinkList: List<Drink>, activity:String="formDailyDrinks") : ArrayAdapter<Drink>(context, 0, drinkList) {
 
     private val activity = activity
-
+    private val DOUBLE_CLICK_TIME_DELTA: Long = 300
+    private var lastClickTime: Long = 0
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         var listItemView = convertView
         if (listItemView == null) {
@@ -67,13 +68,21 @@ class DrinksAdapter(context: Context, drinkList: List<Drink>, activity:String="f
                 editButton.setImageResource(R.drawable.ic_fluent_delete_24_regular)
                 editButton.setOnClickListener {
                     try {
-                        Toast.makeText(
-                            context,
-                            "${currentItem?.foodDescription} removed",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                        var dailyDrinksList = context as dailyDrinksList
-                        currentItem?.let { it1 -> dailyDrinksList.removeFood(it1) }
+                        val clickTime = System.currentTimeMillis()
+                        if (clickTime - lastClickTime < DOUBLE_CLICK_TIME_DELTA) {
+                            Toast.makeText(
+                                context,
+                                "${currentItem?.foodDescription} removed",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            var dailyDrinksList = context as dailyDrinksList
+                            currentItem?.let { it1 -> dailyDrinksList.removeFood(it1) }
+
+                        } else {
+                            Toast.makeText(context,
+                                context.getString(R.string.double_click_fast_for_exclusion), Toast.LENGTH_SHORT).show()
+                        }
+                        lastClickTime = clickTime
                     } catch (e: Exception) {
                         Toast.makeText(context,
                             context.getString(R.string.remove_drink_error), Toast.LENGTH_SHORT).show()

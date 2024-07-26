@@ -36,6 +36,7 @@
     <string name="error_calling_drinks_screen">Erro ao chamar a tela de bebidas</string>
     <string name="it_was_not_possible_to_load_the_drink">Não foi possível carregar a bebida</string>
     <string name="error_calling_daily_drinks">Erro ao chamar bebidas diárias</string>
+    <string name="double_click_fast_for_exclusion">Clique duas vez rápido para exclusão</string>
     <string-array name="categories_array">
         <item>bebidas alcoolicas</item>
         <item>bebidas artesanais</item>
