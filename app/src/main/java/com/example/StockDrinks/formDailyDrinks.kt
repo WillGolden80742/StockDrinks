@@ -373,51 +373,91 @@ class formDailyDrinks : AppCompatActivity() {
     }
 
     fun saveDailyDrinks() {
-        addDrinkToDailyList()
+        addDrinkToDailyList() // Adiciona a bebida atual à lista diária de bebidas.
+
+        // Filtra a lista diária de bebidas para remover qualquer bebida sem descrição.
         val dailyDrinksList = dailyDrinks.drinkList.filter { it.foodDescription != "NO_DESCRIPTION" }
+
+        // Se a lista diária de bebidas não estiver vazia ou se houver uma bebida atual, procede com o salvamento.
         if (dailyDrinksList.isNotEmpty() || currentDrink != null) {
-            val cache = Cache()
-            val jsonUtil = JSON()
+            val cache = Cache() // Cria uma instância da classe Cache para gerenciamento de cache.
+            val jsonUtil = JSON() // Cria uma instância da classe JSON para manipulação de JSON.
+
             try {
+                // Verifica se há cache salvo com a chave "dailyDrinks" e obtém a lista de bebidas diárias.
                 var dailyDrinksLists: List<DailyDrinks> =
                     if (cache.hasCache(this, "dailyDrinks")) {
                         val dailyCaloriesListJson = cache.getCache(this, "dailyDrinks")
-                        jsonUtil.fromJson(dailyCaloriesListJson, Array<DailyDrinks>::class.java)
-                            .toList()
+                        jsonUtil.fromJson(dailyCaloriesListJson, Array<DailyDrinks>::class.java).toList()
                     } else {
-                        emptyList()
+                        emptyList() // Se não houver cache, inicializa uma lista vazia.
                     }
-                val formattedDate = editTextDate.text.toString()
-                val dailyCaloriesListFiltered = dailyDrinksLists.filter { it.date == formattedDate }
+
+                val formattedDate = editTextDate.text.toString() // Obtém a data formatada do campo de texto.
+                val dailyCaloriesListFiltered = dailyDrinksLists.filter { it.date == formattedDate } // Filtra a lista de bebidas diárias pela data.
+
+                // Remove as entradas da lista diária de bebidas que correspondem à data atual.
                 if (dailyCaloriesListFiltered.isNotEmpty()) {
                     dailyDrinksLists = dailyDrinksLists.minus(dailyCaloriesListFiltered)
                 }
-                dailyDrinksLists = dailyDrinksLists.plus(dailyDrinks)
-                cache.setCache(this, "dailyDrinks", jsonUtil.toJson(dailyDrinksLists))
+
+                dailyDrinksLists = dailyDrinksLists.plus(dailyDrinks) // Adiciona a lista diária de bebidas atualizada à lista principal.
+                dailyDrinksList.run { setDrinkList(dailyDrinks.drinkList) } // Atualiza a lista de bebidas no objeto estático da outra classe.
+                cache.setCache(this, "dailyDrinks", jsonUtil.toJson(dailyDrinksLists)) // Salva a lista diária de bebidas no cache.
+
             } catch (e: Exception) {
-                println(RuntimeException(getString(R.string.error_saving_daily_calories)+":$e"))
+                // Trata exceções lançadas durante o processo de salvamento.
+                println(RuntimeException(getString(R.string.error_saving_daily_calories) + ":$e"))
             }
         } else {
-            removeDailyDrinks()
+            removeDailyDrinks() // Se a lista diária de bebidas estiver vazia e não houver bebida atual, remove as bebidas diárias.
         }
     }
 
+
     fun removeDailyDrinks() {
+        // Obtém a data atual do objeto dailyDrinks
         val currentDate = dailyDrinks.date
+
+        // Cria uma instância do objeto Cache
         var cache = Cache()
+
+        // Verifica se há um cache chamado "dailyDrinks" armazenado
         if (cache.hasCache(this, "dailyDrinks")) {
+            // Obtém o conteúdo do cache "dailyDrinks" como uma string JSON
             val dailyCaloriesListJson = cache.getCache(this, "dailyDrinks")
+
+            // Cria uma instância do objeto JSON para manipular o JSON
             val jsonUtil = JSON()
+
+            // Converte a string JSON em uma lista de objetos DailyDrinks
             var dailyDrinksList = jsonUtil.fromJson(dailyCaloriesListJson, Array<DailyDrinks>::class.java).toList()
+
+            // Filtra a lista para encontrar os registros com a data atual
             val dailyCaloriesListFiltered = dailyDrinksList.filter { it.date == currentDate }
+
+            // Se houver registros com a data atual
             if (dailyCaloriesListFiltered.isNotEmpty()) {
+                // Remove os registros com a data atual da lista
                 dailyDrinksList = dailyDrinksList.minus(dailyCaloriesListFiltered)
+
+                // Atualiza o cache com a nova lista (sem os registros removidos)
                 cache.setCache(this, "dailyDrinks", jsonUtil.toJson(dailyDrinksList))
-                Toast.makeText(this,
-                    getString(R.string.daily_drinks_removed_successfully), Toast.LENGTH_SHORT).show()
+
+                // Exibe uma mensagem de sucesso
+                Toast.makeText(this, getString(R.string.daily_drinks_removed_successfully), Toast.LENGTH_SHORT).show()
             }
+
+            // Reseta o objeto dailyDrinks para um novo objeto vazio
+            dailyDrinks = DailyDrinks()
+
+            // Atualiza a lista de bebidas para refletir a remoção
+            dailyDrinksList.run { setDrinkList(dailyDrinks.drinkList) }
         }
+
+        // Finaliza a atividade atual, retornando à anterior
         finish()
     }
+
 
 }
