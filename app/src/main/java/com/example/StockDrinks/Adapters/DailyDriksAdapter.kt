@@ -4,7 +4,6 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
-import android.text.SpannableString
 import android.text.SpannableStringBuilder
 import android.view.LayoutInflater
 import android.view.View
@@ -13,12 +12,15 @@ import android.widget.ArrayAdapter
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat.getSystemService
+import com.example.StockDrinks.Controller.Cache
 import com.example.StockDrinks.Controller.DailyDrinks
 import com.example.StockDrinks.R
 import com.example.StockDrinks.formDailyDrinks
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class DailyDriksAdapter(context: Context, private val dailyDrinksList: List<DailyDrinks>) : ArrayAdapter<DailyDrinks>(context, 0, dailyDrinksList) {
+
+    private val cache = Cache()
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         var listItemView = convertView
@@ -35,11 +37,41 @@ class DailyDriksAdapter(context: Context, private val dailyDrinksList: List<Dail
 
         val copyButton = listItemView.findViewById<FloatingActionButton>(R.id.copyButton)
         val drinkEdit = listItemView.findViewById<FloatingActionButton>(R.id.drinkEdit)
+        var label:String = if (cache.hasCache(context,"dailyDrinksUpdated${dateTextView.text}")) {
+            cache.getCache(context, "dailyDrinksUpdated${dateTextView.text}")
+        } else {
+            generateDrinksListSums(currentDailyDrinks)
+        }
 
-        val drinksListSums = SpannableStringBuilder()
+        descriptionTextView.text = label
+
+        copyButton.setOnClickListener {
+            val clipboardManager = getSystemService(context, ClipboardManager::class.java)
+            val date = dateTextView.text.toString() + ";"
+            val clipData = ClipData.newPlainText("label", date + "\n" + label)
+            clipboardManager!!.setPrimaryClip(clipData)
+            Toast.makeText(context, context.getString(R.string.copied_to_transfer_area), Toast.LENGTH_SHORT).show()
+        }
+
+        drinkEdit.setOnClickListener {
+            val dailyDrinks = dailyDrinksList[position]
+            val intent = Intent(context, formDailyDrinks::class.java)
+            try {
+                intent.putExtra("dailyCaloriesDate", dailyDrinks.date)
+                context.startActivity(intent)
+            } catch (e: Exception) {
+                println(context.getString(R.string.error_when_calling_the_daily_calorie_screen) + ":$e")
+            }
+        }
+
+        return listItemView
+    }
+
+    private fun generateDrinksListSums(dailyDrinks: DailyDrinks): String {
         val drinksMap = mutableMapOf<Pair<String, String>, Int>()
+        val drinksListSums = SpannableStringBuilder()
 
-        currentDailyDrinks.drinkList.forEach {
+        dailyDrinks.drinkList.forEach {
             val parts = it.foodDescription.split(",")
             val category = it.category
             val description = parts[0]
@@ -59,33 +91,12 @@ class DailyDriksAdapter(context: Context, private val dailyDrinksList: List<Dail
                 drinksListSums.append(categoryText)
                 currentCategory = category
             }
-            val formattedDescription = description.split(" ").joinToString(" ") { it.lowercase().capitalize() }
+            val formattedDescription =
+                description.split(" ").joinToString(" ") { it.lowercase().capitalize() }
             val quantityText = "${totalQuantity.toString().padStart(4, '0')} - $formattedDescription\n"
             drinksListSums.append(quantityText)
         }
-
-        descriptionTextView.text = drinksListSums.toString().replace(";","-")
-
-        copyButton.setOnClickListener {
-            val clipboardManager = getSystemService(context, ClipboardManager::class.java)
-            val date = dateTextView.text.toString()+";"
-            val clipData = ClipData.newPlainText("label",date + "\n" + drinksListSums)
-            clipboardManager!!.setPrimaryClip(clipData)
-            Toast.makeText(context,
-                context.getString(R.string.copied_to_transfer_area), Toast.LENGTH_SHORT).show()
-        }
-
-        drinkEdit.setOnClickListener {
-            val dailyDrinks = dailyDrinksList[position]
-            val intent = Intent(context, formDailyDrinks::class.java)
-            try {
-                intent.putExtra("dailyCaloriesDate", dailyDrinks.date)
-                context.startActivity(intent)
-            } catch (e: Exception) {
-                println(context.getString(R.string.error_when_calling_the_daily_calorie_screen)+":$e")
-            }
-        }
-
-        return listItemView
+        cache.setCache(context, "dailyDrinksUpdated${dailyDrinks.date}",drinksListSums.toString().replace(";", "-"))
+        return drinksListSums.toString().replace(";", "-")
     }
 }

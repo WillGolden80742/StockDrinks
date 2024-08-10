@@ -187,7 +187,6 @@ class formDailyDrinks : AppCompatActivity() {
             if (dailyDrinks.drinkList.isEmpty()) {
                 seeDrinksButton.isEnabled = false
             }
-            saveDailyDrinks()
         }
     }
 
@@ -294,6 +293,7 @@ class formDailyDrinks : AppCompatActivity() {
             var dailyDrinksList = Intent(this, dailyDrinksList::class.java)
             var jsonUtil = JSON()
             dailyDrinksList.putExtra("foodsList", dailyDrinks.drinkList.let { jsonUtil.toJson(it) })
+            dailyDrinksList.putExtra("dailyCaloriesDate", editTextDate.text.toString())
             startActivity(dailyDrinksList)
         } catch (e: Exception) {
             println(RuntimeException(getString(R.string.error_calling_daily_drinks)+": $e"))
@@ -394,6 +394,8 @@ class formDailyDrinks : AppCompatActivity() {
                 }
                 dailyDrinksLists = dailyDrinksLists.plus(dailyDrinks)
                 cache.setCache(this, "dailyDrinks", jsonUtil.toJson(dailyDrinksLists))
+                dailyDrinksList.run { setDrinkList(dailyDrinks.drinkList) }
+                cache.setCache(this, "dailyDrinksUpdated${dailyDrinks.date}","")
             } catch (e: Exception) {
                 println(RuntimeException(getString(R.string.error_saving_daily_calories)+":$e"))
             }

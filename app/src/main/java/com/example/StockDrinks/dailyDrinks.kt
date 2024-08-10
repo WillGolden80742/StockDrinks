@@ -80,7 +80,7 @@ class dailyDrinks : AppCompatActivity() {
                 // Atualize a UI na thread principal
                 launch(Dispatchers.Main) {
                     // Crie um adapter para a lista de objetos DailyDrinks
-                    val adapter = DailyDriksAdapter(this@dailyDrinks, dailyDrinksList.distinctBy { it.date })
+                    val adapter = DailyDriksAdapter(this@dailyDrinks, dailyDrinksList)
                     // Atribua o adapter à lista de alimentos
                     drinkList.adapter = adapter
                 }
