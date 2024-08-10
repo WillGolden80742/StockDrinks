@@ -37,6 +37,8 @@
     <string name="it_was_not_possible_to_load_the_drink">Não foi possível carregar a bebida</string>
     <string name="error_calling_daily_drinks">Error calling daily drinks</string>
     <string name="double_click_fast_for_exclusion">Double click fast for exclusion</string>
+    <string name="delete_record_error">Delete record error!</string>
+    <string name="successfully_excluded_record">Successfully excluded record</string>
     <string-array name="categories_array">
         <item>bebidas alcoolicas</item>
         <item>bebidas artesanais</item>
