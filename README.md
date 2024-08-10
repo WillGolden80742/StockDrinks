@@ -33,7 +33,7 @@ The project follows a standard Android architecture with the following key compo
 
 1.  **Clone the repository**:
     ```bash
-    git clone [https://github.com/WillGolden80742/StockDrinks.git](https://github.com/WillGolden80742/StockDrinks.git)
+    git clone https://github.com/WillGolden80742/StockDrinks/
     ```
 2.  **Open in Android Studio**: Open the project in Android Studio.
 3.  **Build and run**: Build the project and run it on an Android emulator or device.
