@@ -1,7 +1,5 @@
 # StockDrinks
 
-[![GitHub license](https://img.shields.io/github/license/WillGolden80742/StockDrinks)](https://github.com/WillGolden80742/StockDrinks/blob/master/LICENSE)
-
 StockDrinks is an Android application designed to help users track their daily drink intake. It allows users to add drinks, categorize them, and view summaries of their consumption. The app also includes features for searching and managing drinks, and for calculating quantities based on simple mathematical expressions.
 
 ## Features
