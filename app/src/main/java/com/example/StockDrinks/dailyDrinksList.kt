@@ -103,34 +103,43 @@ class dailyDrinksList : AppCompatActivity() {
 
         GlobalScope.launch(Dispatchers.IO) {
             try {
-                var dailyDrinksLists: List<DailyDrinks> =
-                    if (cache.hasCache(this@dailyDrinksList, "dailyDrinks")) {
-                        val dailyCaloriesListJson = cache.getCache(this@dailyDrinksList, "dailyDrinks")
-                        jsonUtil.fromJson(dailyCaloriesListJson, Array<DailyDrinks>::class.java)
-                            .toList()
-                    } else {
-                        emptyList()
-                    }
-                val formattedDate = this@dailyDrinksList.dailyCaloriesDate
-                val dailyCaloriesListFiltered = dailyDrinksLists.filter { it.date == formattedDate }
+                val dailyDrinksLists = loadDailyDrinks(cache, jsonUtil)
+                val updatedDailyDrinksLists = updateDailyDrinksList(dailyDrinksLists, dailyDrinks)
 
-                // Check if drinkList is empty for formattedDate
-                if (dailyDrinks.drinkList.isEmpty() && dailyCaloriesListFiltered.isNotEmpty()) {
-                    dailyDrinksLists = dailyDrinksLists.minus(dailyCaloriesListFiltered.toSet()) // Remove if empty
-                } else if (dailyCaloriesListFiltered.isNotEmpty()) {
-                    dailyDrinksLists = dailyDrinksLists.minus(dailyCaloriesListFiltered.toSet())
-                    dailyDrinksLists = dailyDrinksLists.plus(dailyDrinks)
-                } else {
-                    dailyDrinksLists = dailyDrinksLists.plus(dailyDrinks)
-                }
-
-                cache.setCache(this@dailyDrinksList, "dailyDrinks", jsonUtil.toJson(dailyDrinksLists))
-                cache.setCache(this@dailyDrinksList, "dailyDrinksUpdated${dailyDrinks.date}","")
+                cache.setCache(this@dailyDrinksList, "dailyDrinks", jsonUtil.toJson(updatedDailyDrinksLists))
+                cache.setCache(this@dailyDrinksList, "dailyDrinksUpdated${dailyDrinks.date}", "")
             } catch (e: Exception) {
                 withContext(Dispatchers.Main) {
-                    println(RuntimeException(getString(R.string.error_saving_daily_calories)+":$e"))
+                    println(RuntimeException(getString(R.string.error_saving_daily_calories) + ":$e"))
                 }
             }
+        }
+    }
+
+    private fun loadDailyDrinks(cache: Cache, jsonUtil: JSON): List<DailyDrinks> {
+        return if (cache.hasCache(this@dailyDrinksList, "dailyDrinks")) {
+            val dailyCaloriesListJson = cache.getCache(this@dailyDrinksList, "dailyDrinks")
+            jsonUtil.fromJson(dailyCaloriesListJson, Array<DailyDrinks>::class.java).toList()
+        } else {
+            emptyList()
+        }
+    }
+
+    private fun updateDailyDrinksList(
+        dailyDrinksLists: List<DailyDrinks>,
+        dailyDrinks: DailyDrinks
+    ): List<DailyDrinks> {
+        val formattedDate = this@dailyDrinksList.dailyCaloriesDate
+        val existingDailyDrinks = dailyDrinksLists.find { it.date == formattedDate }
+
+        return if (existingDailyDrinks != null) {
+            if (dailyDrinks.drinkList.isEmpty()) {
+                dailyDrinksLists - existingDailyDrinks // Remove if empty
+            } else {
+                dailyDrinksLists - existingDailyDrinks + dailyDrinks // Replace existing
+            }
+        } else {
+            dailyDrinksLists + dailyDrinks // Add new
         }
     }
 

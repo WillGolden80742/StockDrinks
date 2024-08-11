@@ -4,9 +4,6 @@ import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.content.Context
 import android.content.Intent
-import com.example.StockDrinks.Adapters.DrinksAdapter
-import com.example.StockDrinks.Controller.JSON
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -19,9 +16,12 @@ import android.widget.EditText
 import android.widget.ListView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import com.example.StockDrinks.Adapters.DrinksAdapter
 import com.example.StockDrinks.Controller.Cache
 import com.example.StockDrinks.Controller.DailyDrinks
 import com.example.StockDrinks.Controller.Drink
+import com.example.StockDrinks.Controller.JSON
 import com.example.StockDrinks.dailyDrinksList.Companion.setDrinkList
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -190,49 +190,50 @@ class formDailyDrinks : AppCompatActivity() {
         }
     }
 
-    fun calcule (input: String):String {
+    fun calcule(input: String): String {
+        return try {
+            val (operator, firstOperand, secondOperand) = parseInput(input)
+            val result = performCalculation(operator, firstOperand, secondOperand)
+            updateCalculationHistory(firstOperand, secondOperand, operator, result)
+            result.toString()
+        } catch (e: Exception) {
+            input.replace("[^0-9]".toRegex(), "") // Handle invalid input gracefully
+        }
+    }
+
+    private fun parseInput(input: String): Triple<String, Double, Double> {
         val regexAdd = Regex("\\+")
         val regexMultiply = Regex("[*xX]")
-        try {
-            val result = when {
-                regexAdd.containsMatchIn(input) -> {
-                    val parts = input.split(regexAdd)
-                    val firstPart = parts.getOrNull(0)?.trim()?.toDouble() ?: 0.0
-                    val secondPart = parts.getOrNull(1)?.trim()?.toDouble() ?: 0.0
-                    Toast.makeText(
-                        this,
-                        "Resultado de ${firstPart.toInt()} + ${secondPart.toInt()} = ${(firstPart + secondPart).toInt()}",
-                        Toast.LENGTH_LONG
-                    ).show()
-                    val result = firstPart + secondPart
-                    val calArray = currentDrink!!.calcArray.plus("${firstPart.toInt()} + ${secondPart.toInt()} = ${result.toInt()}")
-                    currentDrink!!.calcArray = calArray
-                    result
-                }
 
-                regexMultiply.containsMatchIn(input) -> {
-                    val parts = input.split(regexMultiply)
-                    val firstPart = parts.getOrNull(0)?.trim()?.toDouble()
-                        ?: 1.0 // Se não houver, assume 1 para multiplicação
-                    val secondPart = parts.getOrNull(1)?.trim()?.toDouble()
-                        ?: 1.0 // Se não houver, assume 1 para multiplicação
-                    Toast.makeText(
-                        this,
-                        "Resultado de ${firstPart.toInt()} x ${secondPart.toInt()} = ${(firstPart * secondPart).toInt()}",
-                        Toast.LENGTH_LONG
-                    ).show()
-                    val result = firstPart * secondPart
-                    val calArray = currentDrink!!.calcArray.plus("${firstPart.toInt()} x ${secondPart.toInt()} = ${result.toInt()}")
-                    currentDrink!!.calcArray = calArray
-                    result
-                }
-
-                else -> throw IllegalArgumentException("Operador não suportado na entrada: $input")
-            }
-            return result.toInt().toString()
-        } catch (e: Exception) {
-            return input.replace("[^0-9]".toRegex(), "")
+        return when {
+            regexAdd.containsMatchIn(input) -> Triple("+", extractOperand(input, 0), extractOperand(input, 1))
+            regexMultiply.containsMatchIn(input) -> Triple("*", extractOperand(input, 0, 1.0), extractOperand(input, 1, 1.0))
+            else -> throw IllegalArgumentException("Operador não suportado na entrada: $input")
         }
+    }
+
+    private fun extractOperand(input: String, index: Int, defaultValue: Double = 0.0): Double {
+        return input.split(Regex("[+xX]")).getOrNull(index)?.trim()?.toDouble() ?: defaultValue
+    }
+
+    private fun performCalculation(operator: String, firstOperand: Double, secondOperand: Double): Int {
+        val result = when (operator) {
+            "+" -> firstOperand + secondOperand
+            "*" -> firstOperand * secondOperand
+            else -> throw IllegalArgumentException("Operador inválido: $operator")
+        }
+        showToast(firstOperand, secondOperand, operator, result.toInt())
+        return result.toInt()
+    }
+
+    private fun updateCalculationHistory(firstOperand: Double, secondOperand: Double, operator: String, result: Int) {
+        val calculationString = "${firstOperand.toInt()} $operator ${secondOperand.toInt()} = $result"
+        currentDrink!!.calcArray = currentDrink!!.calcArray.plus(calculationString)
+    }
+
+    private fun showToast(firstOperand: Double, secondOperand: Double, operator: String, result: Int) {
+        val message = "Resultado de ${firstOperand.toInt()} $operator ${secondOperand.toInt()} = $result"
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show()
     }
 
     fun calculeQuantity() {
@@ -254,25 +255,28 @@ class formDailyDrinks : AppCompatActivity() {
         GlobalScope.launch(Dispatchers.IO) {
             val cache = Cache()
             if (cache.hasCache(this@formDailyDrinks, "dailyDrinks")) {
-                val dailyCaloriesListJson = cache.getCache(this@formDailyDrinks, "dailyDrinks")
-                val jsonUtil = JSON()
-                val dailyDrinksList = jsonUtil.fromJson(dailyCaloriesListJson, Array<DailyDrinks>::class.java).toList()
-                val dailyCaloriesListFiltered = dailyDrinksList.filter { it.date == selectedDate }
+                val dailyDrinksList = loadDailyDrinksFromCache(cache)
+                val filteredDailyDrinks = dailyDrinksList.find { it.date == selectedDate }
+
                 withContext(Dispatchers.Main) {
-                    if (dailyCaloriesListFiltered.isNotEmpty()) {
-                        dailyDrinks = dailyCaloriesListFiltered[0]
-                        dailyDrinksList.run { setDrinkList(dailyDrinks.drinkList) }
-                    } else {
-                        dailyDrinks = DailyDrinks()
-                        dailyDrinks.date = selectedDate
-                        dailyDrinksList.run { setDrinkList(dailyDrinks.drinkList) }
-                    }
-                    // se a lista de alimentos estiver vazia, desabilita o botão
-                    seeDrinksButton.isEnabled = dailyDrinks.drinkList.isNotEmpty()
+                    updateDailyDrinksAndUI(filteredDailyDrinks, selectedDate)
                 }
             }
         }
     }
+
+    private fun loadDailyDrinksFromCache(cache: Cache): List<DailyDrinks> {
+        val dailyCaloriesListJson = cache.getCache(this@formDailyDrinks, "dailyDrinks")
+        val jsonUtil = JSON()
+        return jsonUtil.fromJson(dailyCaloriesListJson, Array<DailyDrinks>::class.java).toList()
+    }
+
+    private fun updateDailyDrinksAndUI(filteredDailyDrinks: DailyDrinks?, selectedDate: String) {
+        dailyDrinks = filteredDailyDrinks ?: DailyDrinks().apply { date = selectedDate }
+        setDrinkList(dailyDrinks.drinkList)
+        seeDrinksButton.isEnabled = dailyDrinks.drinkList.isNotEmpty()
+    }
+
 
     fun getDailyDrinks() {
         if (intent.hasExtra("dailyCaloriesDate")) {
@@ -314,32 +318,44 @@ class formDailyDrinks : AppCompatActivity() {
     }
     fun searchDrink(value: String) {
         GlobalScope.launch(Dispatchers.Main) {
-            val jsonUtil = JSON()
-            val cache = Cache()
             try {
-                val drinkNutritionList: List<Drink>
-                if (cache.hasCache(this@formDailyDrinks, "Alimentos")) {
-                    drinkNutritionList = jsonUtil.fromJson(cache.getCache(this@formDailyDrinks, "Alimentos"), Array<Drink>::class.java).toList()
-                } else {
-                    val jsonContent = withContext(Dispatchers.IO) {
-                        resources.openRawResource(R.raw.nutritional_table).bufferedReader()
-                            .use { it.readText() }
-                    }
-                    drinkNutritionList = jsonUtil.fromJson(jsonContent, Array<Drink>::class.java).toList()
-                    cache.setCache(this@formDailyDrinks, "Alimentos", jsonContent)
-                }
-
-                val filteredList = if (value.isEmpty()) {
-                    drinkNutritionList
-                } else {
-                    drinkNutritionList.filter { it.foodDescription.contains(value, ignoreCase = true) }
-                }
+                val drinkNutritionList = loadDrinkNutritionList()
+                val filteredList = filterDrinks(drinkNutritionList, value)
 
                 val adapter = DrinksAdapter(this@formDailyDrinks, filteredList)
                 listFoodsView.adapter = adapter
             } catch (e: Exception) {
-                println(RuntimeException("Erro ao ler o arquivo JSON: $e"))
+                println(RuntimeException("Erro ao ler o arquivo JSON: $e")) // Consider using a more robust logging mechanism
             }
+        }
+    }
+
+    private suspend fun loadDrinkNutritionList(): List<Drink> {
+        val cache = Cache()
+        val jsonUtil = JSON()
+
+        return if (cache.hasCache(this@formDailyDrinks, "Alimentos")) {
+            jsonUtil.fromJson(
+                cache.getCache(this@formDailyDrinks, "Alimentos"),
+                Array<Drink>::class.java
+            ).toList()
+        } else {
+            val jsonContent = withContext(Dispatchers.IO) {
+                resources.openRawResource(R.raw.nutritional_table).bufferedReader()
+                    .use { it.readText() }
+            }
+            val drinkNutritionList =
+                jsonUtil.fromJson(jsonContent, Array<Drink>::class.java).toList()
+            cache.setCache(this@formDailyDrinks, "Alimentos", jsonContent)
+            drinkNutritionList
+        }
+    }
+
+    private fun filterDrinks(drinkNutritionList: List<Drink>, value: String): List<Drink> {
+        return if (value.isEmpty()) {
+            drinkNutritionList
+        } else {
+            drinkNutritionList.filter { it.foodDescription.contains(value, ignoreCase = true) }
         }
     }
 
@@ -374,68 +390,112 @@ class formDailyDrinks : AppCompatActivity() {
 
     fun saveDailyDrinks() {
         addDrinkToDailyList()
-        val dailyDrinksList = dailyDrinks.drinkList.filter { it.foodDescription != "NO_DESCRIPTION" }
-        if (dailyDrinksList.isNotEmpty() || currentDrink != null) {
-            val cache = Cache()
-            val jsonUtil = JSON()
-            try {
-                var dailyDrinksLists: List<DailyDrinks> =
-                    if (cache.hasCache(this, "dailyDrinks")) {
-                        val dailyCaloriesListJson = cache.getCache(this, "dailyDrinks")
-                        jsonUtil.fromJson(dailyCaloriesListJson, Array<DailyDrinks>::class.java)
-                            .toList()
-                    } else {
-                        emptyList()
-                    }
-                val formattedDate = editTextDate.text.toString()
-                val dailyCaloriesListFiltered = dailyDrinksLists.filter { it.date == formattedDate }
-                if (dailyCaloriesListFiltered.isNotEmpty()) {
-                    dailyDrinksLists = dailyDrinksLists.minus(dailyCaloriesListFiltered)
-                }
-                dailyDrinksLists = dailyDrinksLists.plus(dailyDrinks)
-                cache.setCache(this, "dailyDrinks", jsonUtil.toJson(dailyDrinksLists))
-                dailyDrinksList.run { setDrinkList(dailyDrinks.drinkList) }
-                cache.setCache(this, "dailyDrinksUpdated${dailyDrinks.date}","")
-            } catch (e: Exception) {
-                println(RuntimeException(getString(R.string.error_saving_daily_calories)+":$e"))
-            }
+
+        val filteredDailyDrinksList =
+            dailyDrinks.drinkList.filter { it.foodDescription != "NO_DESCRIPTION" }
+
+        if (filteredDailyDrinksList.isNotEmpty() || currentDrink != null) {
+            saveNonEmptyDailyDrinks(filteredDailyDrinksList)
         } else {
             removeDailyDrinks()
         }
     }
 
+    private fun saveNonEmptyDailyDrinks(filteredDailyDrinksList: List<Drink>) {
+        val cache = Cache()
+        val jsonUtil = JSON()
+
+        try {
+            val existingDailyDrinksLists = loadDailyDrinksFromCache(cache, jsonUtil)
+            val updatedDailyDrinksLists =
+                updateDailyDrinksList(existingDailyDrinksLists, dailyDrinks)
+
+            cache.setCache(this, "dailyDrinks", jsonUtil.toJson(updatedDailyDrinksLists))
+            setDrinkList(dailyDrinks.drinkList) // Assuming this function exists in your formDailyDrinks context
+            cache.setCache(this, "dailyDrinksUpdated${dailyDrinks.date}", "")
+        } catch (e: Exception) {
+            println(RuntimeException(getString(R.string.error_saving_daily_calories) + ":$e"))
+        }
+    }
+
+    private fun loadDailyDrinksFromCache(cache: Cache, jsonUtil: JSON): List<DailyDrinks> {
+        return if (cache.hasCache(this, "dailyDrinks")) {
+            val dailyCaloriesListJson = cache.getCache(this, "dailyDrinks")
+            jsonUtil.fromJson(dailyCaloriesListJson, Array<DailyDrinks>::class.java).toList()
+        } else {
+            emptyList()
+        }
+    }
+
+    private fun updateDailyDrinksList(
+        existingDailyDrinksLists: List<DailyDrinks>,
+        newDailyDrinks: DailyDrinks
+    ): List<DailyDrinks> {
+        val formattedDate = editTextDate.text.toString()
+        val existingDailyDrinksForDate =
+            existingDailyDrinksLists.filter { it.date == formattedDate }
+
+        return (existingDailyDrinksLists - existingDailyDrinksForDate.toSet()) + newDailyDrinks
+    }
+
+
     fun removeDailyDrinks() {
         val cache = Cache()
         val jsonUtil = JSON()
+
         GlobalScope.launch(Dispatchers.IO) {
             try {
-                if (cache.hasCache(this@formDailyDrinks, "dailyDrinks")) {
-                    val dailyDrinksListJson = cache.getCache(this@formDailyDrinks, "dailyDrinks")
-                    var dailyDrinksList: List<DailyDrinks> = jsonUtil.fromJson(dailyDrinksListJson, Array<DailyDrinks>::class.java).toList()
+                val existingDailyDrinksLists = loadDailyDrinksFromCache(cache, jsonUtil)
+                val updatedDailyDrinksLists = removeDailyDrinksForDate(existingDailyDrinksLists)
 
-                    val formattedDate = editTextDate.text.toString()
-                    val dailyDrinksListFiltered = dailyDrinksList.filter { it.date == formattedDate }
-                    if (dailyDrinksListFiltered.isNotEmpty()) {
-                        dailyDrinksList = dailyDrinksList.minus(dailyDrinksListFiltered)
-                        cache.setCache(this@formDailyDrinks, "dailyDrinks", jsonUtil.toJson(dailyDrinksList))
-                        withContext(Dispatchers.Main) {
-                            dailyDrinks = DailyDrinks() // Reset dailyDrinks
-                            dailyDrinksList.run { setDrinkList(dailyDrinks.drinkList) }
-                            seeDrinksButton.isEnabled = false
-                            Toast.makeText(this@formDailyDrinks,
-                                getString(R.string.successfully_excluded_record), Toast.LENGTH_SHORT).show()
-                        }
+                if (updatedDailyDrinksLists != existingDailyDrinksLists) { // Check if any drinks were removed
+                    cache.setCache(
+                        this@formDailyDrinks,
+                        "dailyDrinks",
+                        jsonUtil.toJson(updatedDailyDrinksLists)
+                    )
+
+                    withContext(Dispatchers.Main) {
+                        resetDailyDrinksAndUI()
+                        showSuccessToast()
                     }
                 }
             } catch (e: Exception) {
                 withContext(Dispatchers.Main) {
-                    println(RuntimeException("Erro ao remover registro de bebidas diárias: $e"))
-                    Toast.makeText(this@formDailyDrinks,
-                        getString(R.string.delete_record_error), Toast.LENGTH_SHORT).show()
+                    handleRemoveError(e)
                 }
+            } finally {
+                finish() // Ensure finish() is called even if an exception occurs
             }
         }
-        finish()
+    }
+
+    private fun removeDailyDrinksForDate(dailyDrinksList: List<DailyDrinks>): List<DailyDrinks> {
+        val formattedDate = editTextDate.text.toString()
+        return dailyDrinksList.filterNot { it.date == formattedDate }
+    }
+
+    private fun resetDailyDrinksAndUI() {
+        dailyDrinks = DailyDrinks()
+        setDrinkList(dailyDrinks.drinkList)
+        seeDrinksButton.isEnabled = false
+    }
+
+    private fun showSuccessToast() {
+        Toast.makeText(
+            this@formDailyDrinks,
+            getString(R.string.successfully_excluded_record),
+            Toast.LENGTH_SHORT
+        ).show()
+    }
+
+    private fun handleRemoveError(e: Exception) {
+        println(RuntimeException("Erro ao remover registro de bebidas diárias: $e"))
+        Toast.makeText(
+            this@formDailyDrinks,
+            getString(R.string.delete_record_error),
+            Toast.LENGTH_SHORT
+        ).show()
     }
 
 

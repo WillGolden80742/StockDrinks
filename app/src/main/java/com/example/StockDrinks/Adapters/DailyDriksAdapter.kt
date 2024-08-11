@@ -48,7 +48,7 @@ class DailyDriksAdapter(context: Context, private val dailyDrinksList: List<Dail
         copyButton.setOnClickListener {
             val clipboardManager = getSystemService(context, ClipboardManager::class.java)
             val date = dateTextView.text.toString() + ";"
-            val clipData = ClipData.newPlainText("label", date + "\n" + label)
+            val clipData = ClipData.newPlainText("label", date + "\n" + label.replace("-", ";"))
             clipboardManager!!.setPrimaryClip(clipData)
             Toast.makeText(context, context.getString(R.string.copied_to_transfer_area), Toast.LENGTH_SHORT).show()
         }
@@ -96,7 +96,7 @@ class DailyDriksAdapter(context: Context, private val dailyDrinksList: List<Dail
             val quantityText = "${totalQuantity.toString().padStart(4, '0')} - $formattedDescription\n"
             drinksListSums.append(quantityText)
         }
-        cache.setCache(context, "dailyDrinksUpdated${dailyDrinks.date}",drinksListSums.toString().replace(";", "-"))
-        return drinksListSums.toString().replace(";", "-")
+        cache.setCache(context, "dailyDrinksUpdated${dailyDrinks.date}",drinksListSums.toString())
+        return drinksListSums.toString()
     }
 }
