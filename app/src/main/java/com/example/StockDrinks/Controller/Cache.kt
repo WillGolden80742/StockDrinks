@@ -14,8 +14,6 @@ class Cache {
         private const val CACHE_DIRECTORY = "Cache/"
     }
 
-
-    private var fileName: String? = null
     private var file: File? = null
 
     private fun getHashMd5(value: String): String {
@@ -30,31 +28,51 @@ class Cache {
         return hash.toString(16)
     }
 
-    private fun fileHashed(fileName: String) {
-        val hash = getHashMd5(fileName)
-        this.fileName = "$hash.json"
+    private fun getHashSha1(value: String): String {
+        val md: MessageDigest
+        try {
+            md = MessageDigest.getInstance("SHA-1")
+        } catch (e: NoSuchAlgorithmException) {
+            throw RuntimeException(e)
+        }
+        val hash = BigInteger(1, md.digest(value.toByteArray()))
+        return hash.toString(16)
     }
 
-    fun setCache(context: Context, nomeArquivo: String, texto: String) {
-        fileHashed(nomeArquivo)
-        file = File(context.filesDir, CACHE_DIRECTORY + fileName)
+    private fun fileHashed(fileName: String, hashType: String = "SHA-1"): String {
+        return if (hashType == "SHA-1") {
+            "${getHashSha1(fileName)}${fileName.length}.json"
+        } else {
+            "${getHashMd5(fileName)}.json"
+        }
+    }
+
+    fun setCache(context: Context, fileName: String, text: String) {
+        val hashedFileName = fileHashed(fileName, "SHA-1")
+        file = File(context.filesDir, CACHE_DIRECTORY + hashedFileName)
 
         if (file!!.exists()) {
             try {
                 val writer = FileOutputStream(file)
-                writer.write(texto.toByteArray())
+                writer.write(text.toByteArray())
                 writer.close()
             } catch (e: IOException) {
                 e.printStackTrace()
             }
         } else {
-            writeToFile(context, fileName!!, texto.toByteArray())
+            writeToFile(context, hashedFileName, text.toByteArray())
         }
     }
 
-    fun getCache(context: Context,nomeArquivo: String): String {
-        fileHashed(nomeArquivo)
-        file = File(context.filesDir, CACHE_DIRECTORY + fileName)
+    fun getCache(context: Context, fileName: String): String {
+        var hashedFileName = fileHashed(fileName, "SHA-1")
+        file = File(context.filesDir, CACHE_DIRECTORY + hashedFileName)
+
+        if (!file!!.exists()) {
+            hashedFileName = fileHashed(fileName, "MD5")
+            file = File(context.filesDir, CACHE_DIRECTORY + hashedFileName)
+        }
+
         return if (file!!.exists() && file!!.length() > 0) {
             file!!.readText()
         } else {
@@ -62,10 +80,15 @@ class Cache {
         }
     }
 
+    fun hasCache(context: Context, fileName: String): Boolean {
+        var hashedFileName = fileHashed(fileName, "SHA-1")
+        file = File(context.filesDir, CACHE_DIRECTORY + hashedFileName)
 
-    fun hasCache(context: Context,nomeArquivo: String): Boolean {
-        fileHashed(nomeArquivo)
-        file = File(context.filesDir, CACHE_DIRECTORY + fileName)
+        if (!file!!.exists()) {
+            hashedFileName = fileHashed(fileName, "MD5")
+            file = File(context.filesDir, CACHE_DIRECTORY + hashedFileName)
+        }
+
         return file!!.exists() && file!!.length() > 0
     }
 
