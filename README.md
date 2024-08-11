@@ -44,11 +44,3 @@ The project follows a standard Android architecture with the following key compo
 2.  **Log Daily Intake**: Go to `formDailyDrinks` to log the drinks you consume each day. You can search for drinks, specify quantities, and add them to your daily log.
 3.  **View Daily Summaries**: The `dailyDrinks` activity displays a list of your daily drink records. You can view summaries of your drink intake for each day.
 4.  **Edit or Delete**: You can edit or delete drink records and individual drinks from their respective activities.
-
-## Contributing
-
-Contributions are welcome! Please feel free to submit pull requests or open issues.
-
-## License
-
-This project is licensed under the [LICENSE NAME] License - see the [LICENSE](LICENSE) file for details.
