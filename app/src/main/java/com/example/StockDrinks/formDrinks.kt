@@ -113,70 +113,70 @@ class formDrinks : AppCompatActivity() {
     }
 
     // edit food
-    fun saveFood(action: Int) {
+    private fun saveFood(action: Int) {
         try {
             val foodDescription = editTextName.text.toString()
             val category = categorySpinner.selectedItem.toString()
-            // Verificar se todos os campos estão preenchidos
-            if (foodDescription.isEmpty()) {
-                Toast.makeText(
-                    this,
-                    getString(R.string.all_fields_are_required),
-                    Toast.LENGTH_SHORT
-                ).show()
+
+            if (foodDescription.isBlank()) {
+                showToast(getString(R.string.all_fields_are_required))
                 return
             }
 
-            val drink = Drink().apply {
-                if (action == 1) { // Atualizar
-                    foodNumber = currentDrink.foodNumber
-                } else { // Criar
-                    val random = Random().nextInt(100)
-                    foodNumber = (System.currentTimeMillis()).toString()+random
-                }
-                if (foodDescription.isEmpty()) {
-                    this.foodDescription = getString(R.string.drink_name)
-                } else {
-                    this.foodDescription = foodDescription
-                }
-                this.category = category
-                this.quantity = 1.0
+            val drink = createDrink(action, foodDescription, category)
+
+            when (action) {
+                1 -> updateDrink(drink)
+                0 -> createDrink(drink)
+                else -> throw IllegalArgumentException("Invalid action: $action")
             }
 
-            if (action == 1) { // Atualizar
-                drinkNutritionList =
-                    jsonUtil.fromJson(foodCache, Array<Drink>::class.java).toList().map {
-                        if (it.foodNumber == currentDrink.foodNumber) {
-                            drink
-                        } else {
-                            it
-                        }
-                    }
-                Toast.makeText(
-                    this,
-                    getString(R.string.drink_saves_with_success),
-                    Toast.LENGTH_SHORT
-                ).show()
-            } else if (action == 0) { // Criar
-                drinkNutritionList =
-                    jsonUtil.fromJson(foodCache, Array<Drink>::class.java).toList() + drink
-                // Concluir e enviar a lista de alimentos para a próxima atividade
-                val intent = Intent(this, dailyDrinks::class.java)
-                startActivity(intent)
-                Toast.makeText(
-                    this,
-                    getString(R.string.drink_saves_with_success),
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
-
-            // Salvar no cache
-            cache.setCache(this, "Alimentos", jsonUtil.toJson(drinkNutritionList))
+            saveToCache(drinkNutritionList)
             finish()
         } catch (e: Exception) {
-            Toast.makeText(this, "Erro ao salvar o alimento", Toast.LENGTH_SHORT).show()
+                showToast(getString(R.string.save_drink_error))
         }
     }
+
+    private fun createDrink(action: Int, foodDescription: String, category: String): Drink {
+        return Drink().apply {
+            foodNumber = if (action == 1) {
+                currentDrink.foodNumber
+            } else {
+                generateUniqueFoodNumber()
+            }
+            this.foodDescription = foodDescription.ifBlank { getString(R.string.drink_name) }
+            this.category = category
+            this.quantity = 1.0
+        }
+    }
+
+    private fun generateUniqueFoodNumber(): String {
+        val random = Random().nextInt(100)
+        return "${System.currentTimeMillis()}$random"
+    }
+
+    private fun updateDrink(drink: Drink) {
+        drinkNutritionList = jsonUtil.fromJson(foodCache, Array<Drink>::class.java).toList().map {
+            if (it.foodNumber == currentDrink.foodNumber) drink else it
+        }
+        showToast(getString(R.string.drink_saves_with_success))
+    }
+
+    private fun createDrink(drink: Drink) {
+        drinkNutritionList = jsonUtil.fromJson(foodCache, Array<Drink>::class.java).toList() + drink
+        startActivity(Intent(this, dailyDrinks::class.java))
+        showToast(getString(R.string.drink_saves_with_success))
+    }
+
+    private fun saveToCache(drinkNutritionList: List<Drink>) {
+        cache.setCache(this, "Alimentos", jsonUtil.toJson(drinkNutritionList))
+    }
+
+    private fun showToast(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    }
+
 
 
 }

@@ -39,6 +39,7 @@
     <string name="double_click_fast_for_exclusion">Clique duas vez rápido para exclusão</string>
     <string name="delete_record_error">Erro ao excluir registro!</string>
     <string name="successfully_excluded_record">Registro excluído com sucesso!</string>
+    <string name="save_drink_error">Erro ao salvar bebida</string>
     <string-array name="categories_array">
         <item>bebidas alcoolicas</item>
         <item>bebidas artesanais</item>
