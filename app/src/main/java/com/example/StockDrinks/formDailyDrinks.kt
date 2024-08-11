@@ -190,7 +190,7 @@ class formDailyDrinks : AppCompatActivity() {
         }
     }
 
-    fun calcule(input: String): String {
+    private fun calcule(input: String): String {
         return try {
             val (operator, firstOperand, secondOperand) = parseInput(input)
             val result = performCalculation(operator, firstOperand, secondOperand)
@@ -236,22 +236,22 @@ class formDailyDrinks : AppCompatActivity() {
         Toast.makeText(this, message, Toast.LENGTH_LONG).show()
     }
 
-    fun calculeQuantity() {
+    private fun calculeQuantity() {
         quantityEditText.setText(calcule(quantityEditText.text.toString()))
     }
-    fun loading() {
+    private fun loading() {
         var drinkList = emptyList<Drink>()
         val drink = Drink()
         drinkList = drinkList.plus(drink)
         listFoodsView.adapter = DrinksAdapter(this,drinkList,"loading")
     }
-    fun hideKeyboard (view: View): Boolean {
+    private fun hideKeyboard (view: View): Boolean {
         val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
         return true
     }
 
-    fun getDailyDrinksByDate(selectedDate: String) {
+    private fun getDailyDrinksByDate(selectedDate: String) {
         GlobalScope.launch(Dispatchers.IO) {
             val cache = Cache()
             if (cache.hasCache(this@formDailyDrinks, "dailyDrinks")) {
@@ -278,7 +278,7 @@ class formDailyDrinks : AppCompatActivity() {
     }
 
 
-    fun getDailyDrinks() {
+    private fun getDailyDrinks() {
         if (intent.hasExtra("dailyCaloriesDate")) {
             val selectedDate = intent.getStringExtra("dailyCaloriesDate")
             editTextDate.text = selectedDate
@@ -292,7 +292,7 @@ class formDailyDrinks : AppCompatActivity() {
         }
     }
 
-    fun callDailyDrinksList() {
+    private fun callDailyDrinksList() {
         try {
             var dailyDrinksList = Intent(this, dailyDrinksList::class.java)
             var jsonUtil = JSON()
@@ -303,7 +303,7 @@ class formDailyDrinks : AppCompatActivity() {
             println(RuntimeException(getString(R.string.error_calling_daily_drinks)+": $e"))
         }
     }
-    fun loadDrinkToDrinkList() {
+    private fun loadDrinkToDrinkList() {
         searchDrink("")
     }
     fun selectedDrink(drink: Drink) {
@@ -316,7 +316,7 @@ class formDailyDrinks : AppCompatActivity() {
             println(RuntimeException("Error handling drink click: $e"))
         }
     }
-    fun searchDrink(value: String) {
+    private fun searchDrink(value: String) {
         GlobalScope.launch(Dispatchers.Main) {
             try {
                 val drinkNutritionList = loadDrinkNutritionList()
@@ -359,7 +359,7 @@ class formDailyDrinks : AppCompatActivity() {
         }
     }
 
-    fun addDrinkToDailyList() {
+    private fun addDrinkToDailyList() {
         if (currentDrink !== null) {
             try {
                 currentDrink?.let { drink ->
@@ -388,7 +388,7 @@ class formDailyDrinks : AppCompatActivity() {
         }
     }
 
-    fun saveDailyDrinks() {
+    private fun saveDailyDrinks() {
         addDrinkToDailyList()
 
         val filteredDailyDrinksList =
@@ -439,7 +439,7 @@ class formDailyDrinks : AppCompatActivity() {
     }
 
 
-    fun removeDailyDrinks() {
+    private fun removeDailyDrinks() {
         val cache = Cache()
         val jsonUtil = JSON()
 

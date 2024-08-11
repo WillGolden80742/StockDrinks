@@ -5,8 +5,6 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ListView
-import android.widget.Toast
-import androidx.room.util.copy
 import com.example.StockDrinks.Adapters.DrinksAdapter
 import com.example.StockDrinks.Controller.Cache
 import com.example.StockDrinks.Controller.DailyDrinks
@@ -71,7 +69,7 @@ class dailyDrinksList : AppCompatActivity() {
 
     }
 
-    fun searchDrink (drinkName: String) {
+    private fun searchDrink (drinkName: String) {
         if (intent.hasExtra("foodsList")) {
             val jsonUtil = JSON()
             setDrinkList(intent.getStringExtra("foodsList")?.let { jsonUtil.fromJson(it, Array<Drink>::class.java) }?.toList()!!)
@@ -94,7 +92,7 @@ class dailyDrinksList : AppCompatActivity() {
         }
     }
 
-    fun saveDailyDrinks() {
+    private fun saveDailyDrinks() {
         val cache = Cache()
         val jsonUtil = JSON()
         val dailyDrinks = DailyDrinks()
