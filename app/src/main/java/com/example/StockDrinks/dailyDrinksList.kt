@@ -127,9 +127,7 @@ class dailyDrinksList : AppCompatActivity() {
         dailyDrinksLists: List<DailyDrinks>,
         dailyDrinks: DailyDrinks
     ): List<DailyDrinks> {
-        val formattedDate = this@dailyDrinksList.dailyCaloriesDate
-        val existingDailyDrinks = dailyDrinksLists.find { it.date == formattedDate }
-
+        val existingDailyDrinks = dailyDrinksLists.find { it.date == dailyDrinks.date }
         return if (existingDailyDrinks != null) {
             if (dailyDrinks.drinkList.isEmpty()) {
                 dailyDrinksLists - existingDailyDrinks // Remove if empty

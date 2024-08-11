@@ -395,13 +395,13 @@ class formDailyDrinks : AppCompatActivity() {
             dailyDrinks.drinkList.filter { it.foodDescription != "NO_DESCRIPTION" }
 
         if (filteredDailyDrinksList.isNotEmpty() || currentDrink != null) {
-            saveNonEmptyDailyDrinks(filteredDailyDrinksList)
+            saveNonEmptyDailyDrinks()
         } else {
             removeDailyDrinks()
         }
     }
 
-    private fun saveNonEmptyDailyDrinks(filteredDailyDrinksList: List<Drink>) {
+    private fun saveNonEmptyDailyDrinks() {
         val cache = Cache()
         val jsonUtil = JSON()
 
