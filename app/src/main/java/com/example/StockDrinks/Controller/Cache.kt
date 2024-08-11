@@ -31,7 +31,8 @@ class Cache {
     }
 
     private fun fileHashed(fileName: String) {
-        this.fileName = getHashMd5(fileName) + ".json"
+        val hash = getHashMd5(fileName)
+        this.fileName = hash + hash.length + ".json"
     }
 
     fun setCache(context: Context, nomeArquivo: String, texto: String) {
