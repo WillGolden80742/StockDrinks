@@ -2,8 +2,6 @@ package com.example.StockDrinks.Controller
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.os.Build
-import androidx.annotation.RequiresApi
 import com.example.StockDrinks.R
 import java.text.DecimalFormat
 import java.time.LocalTime
