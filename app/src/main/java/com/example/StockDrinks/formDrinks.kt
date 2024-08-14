@@ -104,7 +104,6 @@ class formDrinks : AppCompatActivity() {
 
 
 
-
     fun removeFood() {
         drinkNutritionList = jsonUtil.fromJson(foodCache, Array<Drink>::class.java).toList().filter { it.foodNumber != currentDrink.foodNumber }
         cache.setCache(this, "Alimentos", jsonUtil.toJson(drinkNutritionList))
