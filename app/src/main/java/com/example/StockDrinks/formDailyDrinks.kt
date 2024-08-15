@@ -144,13 +144,15 @@ class formDailyDrinks : AppCompatActivity() {
                     var cleanInput = StringBuilder()
                     var hasSpecialChar = false
 
+                    val operatorRegex = Regex("[*xX+×/%-]")
+
                     for (char in input) {
                         if (char.isDigit()) {
                             cleanInput.append(char)
-                        } else if (!hasSpecialChar && (char == '*' || char == 'x' || char == 'X' || char == '+' || char == '×')) {
+                        } else if (!hasSpecialChar && operatorRegex.matches(char.toString())) {
                             cleanInput.append(char)
                             hasSpecialChar = true
-                        } else if (hasSpecialChar && (char == '*' || char == 'x' || char == 'X' || char == '+' || char == '×')) {
+                        } else if (hasSpecialChar && operatorRegex.matches(char.toString())) {
                             cleanInput = StringBuilder().append(calcule(cleanInput.toString())).append(char)
                             hasSpecialChar = false
                         }
@@ -207,22 +209,29 @@ class formDailyDrinks : AppCompatActivity() {
     private fun parseInput(input: String): Triple<String, Double, Double> {
         val regexAdd = Regex("\\+")
         val regexMultiply = Regex("[*xX×]")
+        val regexSubtract = Regex("-")
+        val regexDivide = Regex("[/%]")
 
         return when {
             regexAdd.containsMatchIn(input) -> Triple("+", extractOperand(input, 0), extractOperand(input, 1))
             regexMultiply.containsMatchIn(input) -> Triple("*", extractOperand(input, 0, 1.0), extractOperand(input, 1, 1.0))
+            regexSubtract.containsMatchIn(input) -> Triple("-", extractOperand(input, 0), extractOperand(input, 1))
+            regexDivide.containsMatchIn(input) -> Triple("/", extractOperand(input, 0, 1.0), extractOperand(input, 1, 1.0))
             else -> throw IllegalArgumentException("Operador não suportado na entrada: $input")
         }
     }
 
     private fun extractOperand(input: String, index: Int, defaultValue: Double = 0.0): Double {
-        return input.split(Regex("[+xX×]")).getOrNull(index)?.trim()?.toDouble() ?: defaultValue
+        return input.split(Regex("[+xX×\\-/%]")).getOrNull(index)?.trim()?.toDouble() ?: defaultValue
     }
 
     private fun performCalculation(operator: String, firstOperand: Double, secondOperand: Double): Int {
         val result = when (operator) {
             "+" -> firstOperand + secondOperand
             "*" -> firstOperand * secondOperand
+            "-" -> firstOperand - secondOperand
+            "/" -> firstOperand / secondOperand
+            "%" -> firstOperand % secondOperand
             else -> throw IllegalArgumentException("Operador inválido: $operator")
         }
         showToast(firstOperand, secondOperand, operator, result.toInt())
