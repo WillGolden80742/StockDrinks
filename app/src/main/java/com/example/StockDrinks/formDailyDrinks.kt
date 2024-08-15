@@ -141,15 +141,18 @@ class formDailyDrinks : AppCompatActivity() {
                     quantityEditText.removeTextChangedListener(this)
 
                     val input = it.toString()
-                    val cleanInput = StringBuilder()
+                    var cleanInput = StringBuilder()
                     var hasSpecialChar = false
 
                     for (char in input) {
                         if (char.isDigit()) {
                             cleanInput.append(char)
-                        } else if (!hasSpecialChar && (char == '*' || char == 'x' || char == 'X' || char == '+')) {
+                        } else if (!hasSpecialChar && (char == '*' || char == 'x' || char == 'X' || char == '+' || char == '×')) {
                             cleanInput.append(char)
                             hasSpecialChar = true
+                        } else if (hasSpecialChar && (char == '*' || char == 'x' || char == 'X' || char == '+' || char == '×')) {
+                            cleanInput = StringBuilder().append(calcule(cleanInput.toString())).append(char)
+                            hasSpecialChar = false
                         }
                     }
 
@@ -203,7 +206,7 @@ class formDailyDrinks : AppCompatActivity() {
 
     private fun parseInput(input: String): Triple<String, Double, Double> {
         val regexAdd = Regex("\\+")
-        val regexMultiply = Regex("[*xX]")
+        val regexMultiply = Regex("[*xX×]")
 
         return when {
             regexAdd.containsMatchIn(input) -> Triple("+", extractOperand(input, 0), extractOperand(input, 1))
@@ -213,7 +216,7 @@ class formDailyDrinks : AppCompatActivity() {
     }
 
     private fun extractOperand(input: String, index: Int, defaultValue: Double = 0.0): Double {
-        return input.split(Regex("[+xX]")).getOrNull(index)?.trim()?.toDouble() ?: defaultValue
+        return input.split(Regex("[+xX×]")).getOrNull(index)?.trim()?.toDouble() ?: defaultValue
     }
 
     private fun performCalculation(operator: String, firstOperand: Double, secondOperand: Double): Int {
